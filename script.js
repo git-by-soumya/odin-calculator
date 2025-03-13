@@ -14,9 +14,9 @@ function divide(a, b) {
     return a / b;
 }
 
-let operandOne;
-let operator;
-let operandTwo;
+let operandOne = "";
+let operator = "";
+let operandTwo = "";
 
 function operate(sign, num1, num2) {
     let result;
@@ -59,57 +59,7 @@ function digitPressHandler(event) {
             case "7":
             case "8":
             case "9":
-                displayContent = displayContent + buttonContent;
-                display.textContent = displayContent;
-                break;
-            case "+":
-            case "-":
-            case "*":
-            case "/":
-                let lastChar = display.textContent.at(-1);
-                if(
-                    lastChar === "+" || 
-                    lastChar === "-" || 
-                    lastChar === "*" || 
-                    lastChar === "/") {
-                        displayContent = 
-                        display.textContent.slice(0, -1) + 
-                        buttonContent;
-                        display.textContent = displayContent;
-                        break;
-                    }
-                    else {
-                        displayContent = display.textContent + buttonContent;
-                        display.textContent = displayContent;
-                        break;
-                    }
-            case "=":
-                let operatorIndex = displayContent
-                .split("")
-                .findIndex(
-                    ch => 
-                    ch === "+" || ch === "-" || ch === "*" || ch === "/"
-                );
-                operator = displayContent.at(operatorIndex);
-                operandOne = +displayContent.slice(0, operatorIndex);
-                operandTwo = +displayContent.slice(operatorIndex + 1);
-                let result = operate(operator, operandOne, operandTwo);
-                displayContent = +result;
-                display.textContent = displayContent;
-                break;
-        }
-    }
-}
-
-doc.addEventListener("click", digitPressHandler);
-
-/*
-let expressionObj = {
-number1: null,
-operator: null,
-number2: null,
-}
-
+                /*
 When a number is pressed, 
     if number1 is filled/not null,
         and if operator is filled/not null,
@@ -119,6 +69,7 @@ When a number is pressed,
             else if number2 is not filled/null,
                 and if operator is =,
                     overwrite number1 with new number and, 
+                    set operator to null and, 
                     display number1
                 else if operator is not =,
                     then write to number2 and, 
@@ -129,7 +80,45 @@ When a number is pressed,
     else if number1 is not filled/null,
         write to number1 and, 
         display number1
-
+*/
+                if(operandOne !== "") {
+                    if(operator !== "") {
+                        if(operandTwo !== "") {
+                            operandTwo = 
+                            operandTwo.toString().concat(buttonContent);
+                            display.textContent = 
+                            operandOne + operator + operandTwo;
+                        }
+                        else if(operandTwo === "") {
+                            if(operator === "=") {
+                                operandOne = buttonContent;
+                                operator = "";
+                                display.textContent = operandOne;
+                            }
+                            else if(operator !== "=") {
+                                operandTwo = buttonContent;
+                                display.textContent = 
+                                operandOne + operator + operandTwo;
+                            }
+                        }
+                    }
+                    else if(operator === "") {
+                        operandOne = 
+                        operandOne.toString().concat(buttonContent);
+                        display.textContent = operandOne;
+                    }
+                }
+                else if(operandOne === "") {
+                    operandOne = buttonContent;
+                    display.textContent = operandOne;
+                }
+                break;
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "=":
+                /*
 When a symbol is pressed, 
     if symbol is among + - * /, 
         if number1 is filled/not null,
@@ -166,6 +155,75 @@ When a symbol is pressed,
                 display number1
         else if number1 is not filled/null,
             do nothing
+*/
+                if(buttonContent !== "=") {
+                    if(operandOne !== "") {
+                        if(operator !== "") {
+                            if(operandTwo !== "") {
+                                let result = 
+                                operate(operator, +operandOne, +operandTwo);
+                                operandOne = result;
+                                operator = buttonContent;
+                                operandTwo = "";
+                                display.textContent = 
+                                operandOne.toString().concat(operator);                                            
+                            }
+                            else if(operandTwo === "") {
+                                operator = buttonContent;
+                                display.textContent = 
+                                operandOne.toString().concat(operator);
+                            }
+                        }
+                        else if(operator === "") {
+                            operator = buttonContent;
+                            display.textContent = 
+                            operandOne.toString().concat(operator);                            
+                        }
+                    }
+                    else if(operandOne === "") {
+                        operandOne = display.textContent;
+                        operator = buttonContent;
+                        display.textContent = 
+                        operandOne.toString().concat(operator);
+                    }
+                }
+                else if(buttonContent === "=") {
+                    if(operandOne !== "") {
+                        if(operator !== "") {
+                            if(operandTwo !== "") {
+                                let result = 
+                                operate(operator, +operandOne, +operandTwo);
+                                operandOne = result;
+                                operator = buttonContent;
+                                operandTwo = "";
+                                display.textContent = operandOne;
+                            }
+                            else if(operandTwo === "") {
+                                operator = "";
+                                display.textContent = operandOne;
+                            }
+                        }
+                        else if(operator === "") {
+                            display.textContent = operandOne;
+                        }
+                    }
+                    else if(operandOne === "") {
+                        //do nothing
+                    }
+                }
+                break;
+        }
+    }
+}
+
+doc.addEventListener("click", digitPressHandler);
+
+/*
+let expressionObj = {
+number1: "",
+operator: "",
+number2: "",
+}
 
     When a result is displayed, pressing a new digit should clear the result and
      start a new calculation instead of appending the digit to the existing 
@@ -173,4 +231,21 @@ When a symbol is pressed,
     After pressing =, getting and displaying a result, if a symbol is pressed, 
     the displayed number is taken into number1, but if a number is pressed, then
      the displayed number is overwritten.
+*/
+
+/*
+Consider arrays for operands (push and pop), and join during evaluation.
+Might be better than string concatenation.
+Make a decision tree with state (button-entered, display, operands, operator) 
+shown, i.e. 
+state#0(no-button, display: 0?, operands and operator: null/[]), 
+then events like: 
+digit-button-press, 
+operator-button-press, 
+equal-to-button-press, 
+clear-button-press, 
+backspace-button-press, 
+decimal-dot-button-press, 
+each with its own arrow path to a new state and so on.
+Also, implement keyboard support.
 */
