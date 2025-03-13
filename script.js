@@ -42,21 +42,12 @@ function operate(sign, num1, num2) {
 const doc = document;
 let displayContent = "";
 
-function display(content) {
-    
-}
-
 function digitPressHandler(event) {
     const target = event.target;
     if (target.tagName === "BUTTON") {
         const buttonContent = target.textContent;
         const display = document.querySelector("p");
-        const signs = {
-            "+": 0,
-            "-": 0,
-            "*": 0,
-            "/": 0,
-        };
+
         switch (buttonContent) {
             case "0":
             case "1":
@@ -110,61 +101,76 @@ function digitPressHandler(event) {
     }
 }
 
-/*
-default display: 0
-any number press: replace with number
-obj signs = {"+":0,...,}
-any operator press: 
-    check if any property in obj is 1 in displaycontent, then get vars, evalThen
-    concatenate with operator
-after numbers press when operator is pressed,
-    checks if there is any operator before
-        if there is operate with num1, num2, and operator
-    if not, put number in operand1 or 2 whichever is empty
-number operator number , another operator then operate before than print sign 
-after
-
-*/
-
-
 doc.addEventListener("click", digitPressHandler);
 
-/*displayContent =
-                 signs.includes(displayContent.at(-1)) ?
-                  displayContent.slice(0, -1) + buttonContent :
-                   displayContent + buttonContent;
-                display(displayContent);
-                operator = buttonContent;
-                operandOne = +displayContent.slice(0, -1);*/
-                /*
-                let currentDisplay = displayContent
-                    .split("")
-                    .reduce((obj, ch) => {
-                        if (ch in obj) {
-                            obj[ch]++;
-                        }
-                        return obj;
-                    },
-                        {
-                            "+": 0,
-                            "-": 0,
-                            "*": 0,
-                            "/": 0,
-                        });
-                operator = (currentDisplay) => {
-                    for (const key in currentDisplay) {
-                        if (currentDisplay[key] === 1) {
-                            return key;
-                        }
-                    }
-                }
-                let operatorIndex = displayContent
-                    .split("")
-                    .findIndex(ch => ch === "+");
-                operandOne = +displayContent.slice(0, operatorIndex);
-                operandTwo = +displayContent.slice(operatorIndex + 1);
-                let result = operate(operator, operandOne, operandTwo);
-                displayContent = result.toString() + operator;
-                display(displayContent);
-                break;
-                */
+/*
+let expressionObj = {
+number1: null,
+operator: null,
+number2: null,
+}
+
+When a number is pressed, 
+    if number1 is filled/not null,
+        and if operator is filled/not null,
+            and if number2 is filled/not null,
+                then concat to number2 and, 
+                display number1 operator number2
+            else if number2 is not filled/null,
+                and if operator is =,
+                    overwrite number1 with new number and, 
+                    display number1
+                else if operator is not =,
+                    then write to number2 and, 
+                    display number1 operator number2
+        else if operator is not filled/null,
+            concat to number1 and, 
+            display number1
+    else if number1 is not filled/null,
+        write to number1 and, 
+        display number1
+
+When a symbol is pressed, 
+    if symbol is among + - * /, 
+        if number1 is filled/not null,
+            and if operator is filled/not null,
+                and if number2 is filled/not null,
+                    then eval expression and, 
+                    put result into number1, 
+                    and put current symbol press into operator, 
+                    and write number2 to null and, 
+                    display number1 operator
+                else if number2 is not filled/null,
+                    then overwrite operator and, 
+                    display number1 operator
+            else if operator is not filled/null,
+                write to operator and, 
+                display number1 operator
+        else if number1 is not filled/null,
+            write number1 from display, 
+            and write operator and, 
+            display number1 operator
+    else if symbol is =, 
+        if number1 is filled/not null,
+            and if operator is filled/not null,
+                and if number2 is filled/not null,
+                    then eval expression and, 
+                    put result into number1, 
+                    and write = to operator, 
+                    and write number2 to null and, 
+                    display number1
+                else if number2 is not filled/null,
+                    then write operator to null, 
+                    display number1
+            else if operator is not filled/null,
+                display number1
+        else if number1 is not filled/null,
+            do nothing
+
+    When a result is displayed, pressing a new digit should clear the result and
+     start a new calculation instead of appending the digit to the existing 
+     result. Check whether this is the case on your calculator!
+    After pressing =, getting and displaying a result, if a symbol is pressed, 
+    the displayed number is taken into number1, but if a number is pressed, then
+     the displayed number is overwritten.
+*/
