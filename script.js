@@ -1,3 +1,38 @@
+/*
+Consider arrays for operands (push and pop), and join during evaluation.
+Might be better than string concatenation.
+Make a decision tree with state (button-entered, display, operands, operator) 
+shown, i.e. 
+state#0(no-button, display: 0?, operands and operator: null/[]), 
+then events like: 
+digit-button-press, 
+operator-button-press, 
+equal-to-button-press, 
+clear-button-press, 
+backspace-button-press, 
+decimal-dot-button-press, 
+each with its own arrow path to a new state and so on.
+Also, implement keyboard support.
+*/
+
+
+//known issues
+/**
+ * answers with long decimal parts aren't rounded, might overflow
+ * divide by zero gets Infinity instead of snarky error message
+ * operation on the above result will result in NaN
+ * 
+ */
+
+//todo
+/**
+ * decimal button, only one decimal allowed in display and operands
+ * backspace to undo last input
+ * keyboard support
+ * class names / css styling / page styling
+ */
+
+
 function add(a, b) {
     return a + b;
 }
@@ -212,40 +247,13 @@ When a symbol is pressed,
                     }
                 }
                 break;
+            case "Clear":
+                display.textContent = 0;
+                operandOne = "";
+                operator = "";
+                operandTwo = "";          
         }
     }
 }
 
 doc.addEventListener("click", digitPressHandler);
-
-/*
-let expressionObj = {
-number1: "",
-operator: "",
-number2: "",
-}
-
-    When a result is displayed, pressing a new digit should clear the result and
-     start a new calculation instead of appending the digit to the existing 
-     result. Check whether this is the case on your calculator!
-    After pressing =, getting and displaying a result, if a symbol is pressed, 
-    the displayed number is taken into number1, but if a number is pressed, then
-     the displayed number is overwritten.
-*/
-
-/*
-Consider arrays for operands (push and pop), and join during evaluation.
-Might be better than string concatenation.
-Make a decision tree with state (button-entered, display, operands, operator) 
-shown, i.e. 
-state#0(no-button, display: 0?, operands and operator: null/[]), 
-then events like: 
-digit-button-press, 
-operator-button-press, 
-equal-to-button-press, 
-clear-button-press, 
-backspace-button-press, 
-decimal-dot-button-press, 
-each with its own arrow path to a new state and so on.
-Also, implement keyboard support.
-*/
