@@ -24,6 +24,13 @@ Also, implement keyboard support.
  * 
  */
 
+//seemingly corrected
+/**
+ * problem of concatenation upon pressing = again after result seems to have 
+ * gone away
+ */
+
+
 //todo
 /**
  * decimal button, only one decimal allowed in display and operands
@@ -55,6 +62,7 @@ let operandTwo = "";
 
 function operate(sign, num1, num2) {
     let result;
+
     switch (sign) {
         case "+":
             result = add(num1, num2);
@@ -79,6 +87,7 @@ let displayContent = "";
 
 function digitPressHandler(event) {
     const target = event.target;
+
     if (target.tagName === "BUTTON") {
         const buttonContent = target.textContent;
         const display = document.querySelector("p");
@@ -94,28 +103,6 @@ function digitPressHandler(event) {
             case "7":
             case "8":
             case "9":
-                /*
-When a number is pressed, 
-    if number1 is filled/not null,
-        and if operator is filled/not null,
-            and if number2 is filled/not null,
-                then concat to number2 and, 
-                display number1 operator number2
-            else if number2 is not filled/null,
-                and if operator is =,
-                    overwrite number1 with new number and, 
-                    set operator to null and, 
-                    display number1
-                else if operator is not =,
-                    then write to number2 and, 
-                    display number1 operator number2
-        else if operator is not filled/null,
-            concat to number1 and, 
-            display number1
-    else if number1 is not filled/null,
-        write to number1 and, 
-        display number1
-*/
                 if(operandOne !== "") {
                     if(operator !== "") {
                         if(operandTwo !== "") {
@@ -152,45 +139,6 @@ When a number is pressed,
             case "-":
             case "*":
             case "/":
-            case "=":
-                /*
-When a symbol is pressed, 
-    if symbol is among + - * /, 
-        if number1 is filled/not null,
-            and if operator is filled/not null,
-                and if number2 is filled/not null,
-                    then eval expression and, 
-                    put result into number1, 
-                    and put current symbol press into operator, 
-                    and write number2 to null and, 
-                    display number1 operator
-                else if number2 is not filled/null,
-                    then overwrite operator and, 
-                    display number1 operator
-            else if operator is not filled/null,
-                write to operator and, 
-                display number1 operator
-        else if number1 is not filled/null,
-            write number1 from display, 
-            and write operator and, 
-            display number1 operator
-    else if symbol is =, 
-        if number1 is filled/not null,
-            and if operator is filled/not null,
-                and if number2 is filled/not null,
-                    then eval expression and, 
-                    put result into number1, 
-                    and write = to operator, 
-                    and write number2 to null and, 
-                    display number1
-                else if number2 is not filled/null,
-                    then write operator to null, 
-                    display number1
-            else if operator is not filled/null,
-                display number1
-        else if number1 is not filled/null,
-            do nothing
-*/
                 if(buttonContent !== "=") {
                     if(operandOne !== "") {
                         if(operator !== "") {
@@ -222,7 +170,9 @@ When a symbol is pressed,
                         operandOne.toString().concat(operator);
                     }
                 }
-                else if(buttonContent === "=") {
+                break;
+            case "=":
+                if(buttonContent === "=") {
                     if(operandOne !== "") {
                         if(operator !== "") {
                             if(operandTwo !== "") {
@@ -234,7 +184,7 @@ When a symbol is pressed,
                                 display.textContent = operandOne;
                             }
                             else if(operandTwo === "") {
-                                operator = "";
+                                operator = buttonContent;
                                 display.textContent = operandOne;
                             }
                         }
