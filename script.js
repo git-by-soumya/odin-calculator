@@ -12,15 +12,20 @@ clear-button-press,
 backspace-button-press, 
 decimal-dot-button-press, 
 each with its own arrow path to a new state and so on.
+Try duplicate consecutive button presses, e.g. 
+0 -> 0 
+or
++ -> +
+and so on.
 Also, implement keyboard support.
 */
 
 
 //known issues
 /**
- * answers with long decimal parts aren't rounded, might overflow
- * divide by zero gets Infinity instead of snarky error message
- * operation on the above result will result in NaN
+ * Answers with long decimal parts aren't rounded, might overflow
+ * Divide by zero gets Infinity instead of snarky error message
+ * Operation on the above result (or 0/0) will result in NaN
  * 
  */
 
@@ -28,6 +33,16 @@ Also, implement keyboard support.
 /**
  * problem of concatenation upon pressing = again after result seems to have 
  * gone away
+ * Typed some numbers -> pressed = -> typing again will append to num1,
+ * but,
+ * typed some numbers -> pressed operator -> pressed = -> typing again will 
+ * overwrite num1, seems inconsistent, so,
+ * pressing = whether after number keys or operator keys should overwrite or 
+ * append, not both. Preferably overwrite.
+ * Care must be taken towards num2
+ * Behaviour proceeds as follows:
+ * num1 not empty, operator empty -> = press, press number, append to num1
+ * num1 not empty, operator not empty -> = press, press number, overwrite num1
  */
 
 
@@ -85,7 +100,7 @@ function operate(sign, num1, num2) {
 const doc = document;
 let displayContent = "";
 
-function digitPressHandler(event) {
+function buttonPressHandler(event) {
     const target = event.target;
 
     if (target.tagName === "BUTTON") {
@@ -164,7 +179,7 @@ function digitPressHandler(event) {
                         }
                     }
                     else if(operandOne === "") {
-                        operandOne = display.textContent;
+                        operandOne = "0";
                         operator = buttonContent;
                         display.textContent = 
                         operandOne.toString().concat(operator);
@@ -189,6 +204,7 @@ function digitPressHandler(event) {
                             }
                         }
                         else if(operator === "") {
+                            operator = buttonContent;
                             display.textContent = operandOne;
                         }
                     }
@@ -206,4 +222,4 @@ function digitPressHandler(event) {
     }
 }
 
-doc.addEventListener("click", digitPressHandler);
+doc.addEventListener("click", buttonPressHandler);
