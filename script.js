@@ -24,25 +24,14 @@ Also, implement keyboard support.
 //known issues
 /**
  * Answers with long decimal parts aren't rounded, might overflow
- * Divide by zero gets Infinity instead of snarky error message
+ * 
  * Operation on the above result (or 0/0) will result in NaN
  * 
  */
 
 //seemingly corrected
 /**
- * problem of concatenation upon pressing = again after result seems to have 
- * gone away
- * Typed some numbers -> pressed = -> typing again will append to num1,
- * but,
- * typed some numbers -> pressed operator -> pressed = -> typing again will 
- * overwrite num1, seems inconsistent, so,
- * pressing = whether after number keys or operator keys should overwrite or 
- * append, not both. Preferably overwrite.
- * Care must be taken towards num2
- * Behaviour proceeds as follows:
- * num1 not empty, operator empty -> = press, press number, append to num1
- * num1 not empty, operator not empty -> = press, press number, overwrite num1
+ * Divide by zero gets Infinity instead of snarky error message
  */
 
 
@@ -54,6 +43,7 @@ Also, implement keyboard support.
  * class names / css styling / page styling
  */
 
+"use strict";
 
 function add(a, b) {
     return a + b;
@@ -158,13 +148,22 @@ function buttonPressHandler(event) {
                     if(operandOne !== "") {
                         if(operator !== "") {
                             if(operandTwo !== "") {
-                                let result = 
-                                operate(operator, +operandOne, +operandTwo);
-                                operandOne = result;
-                                operator = buttonContent;
-                                operandTwo = "";
-                                display.textContent = 
-                                operandOne.toString().concat(operator);                                            
+                                if(operator === "/" && +operandTwo === 0)
+                                {
+                                    display.textContent = "you nutter";
+                                    operandOne = "";
+                                    operator = "";
+                                    operandTwo = "";
+                                }
+                                else {
+                                    let result = 
+                                    operate(operator, +operandOne, +operandTwo);
+                                    operandOne = result;
+                                    operator = buttonContent;
+                                    operandTwo = "";
+                                    display.textContent = 
+                                    operandOne.toString().concat(operator);
+                                }                                        
                             }
                             else if(operandTwo === "") {
                                 operator = buttonContent;
@@ -191,12 +190,20 @@ function buttonPressHandler(event) {
                     if(operandOne !== "") {
                         if(operator !== "") {
                             if(operandTwo !== "") {
-                                let result = 
-                                operate(operator, +operandOne, +operandTwo);
-                                operandOne = result;
-                                operator = buttonContent;
-                                operandTwo = "";
-                                display.textContent = operandOne;
+                                if(operator === "/" && +operandTwo === 0) {
+                                    display.textContent = "you nutter";
+                                    operandOne = "";
+                                    operator = "";
+                                    operandTwo = "";                                    
+                                }
+                                else {
+                                    let result = 
+                                    operate(operator, +operandOne, +operandTwo);
+                                    operandOne = result;
+                                    operator = buttonContent;
+                                    operandTwo = "";
+                                    display.textContent = operandOne;
+                                }
                             }
                             else if(operandTwo === "") {
                                 operator = buttonContent;
