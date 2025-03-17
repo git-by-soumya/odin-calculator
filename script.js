@@ -1,44 +1,21 @@
-/*
-Consider arrays for operands (push and pop), and join during evaluation.
-Might be better than string concatenation.
-Make a decision tree with state (button-entered, display, operands, operator) 
-shown, i.e. 
-state#0(no-button, display: 0?, operands and operator: null/[]), 
-then events like: 
-digit-button-press, 
-operator-button-press, 
-equal-to-button-press, 
-clear-button-press, 
-backspace-button-press, 
-decimal-dot-button-press, 
-each with its own arrow path to a new state and so on.
-Try duplicate consecutive button presses, e.g. 
-0 -> 0 
-or
-+ -> +
-and so on.
-Also, implement keyboard support.
-*/
-
-
 //known issues
 /**
  * Answers with long decimal parts aren't rounded, might overflow
- * 
- * Operation on the above result (or 0/0) will result in NaN
- * 
  */
 
 //seemingly corrected
 /**
  * Divide by zero gets Infinity instead of snarky error message
+ * Operation on the above result (or 0/0) will result in NaN
  */
-
 
 //todo
 /**
- * decimal button, only one decimal allowed in display and operands
+ * refactor
+ * decimal button, only one decimal allowed in (display?) an operand
  * backspace to undo last input
+ * Consider arrays for operands (push and pop), and join during evaluation.
+ * Might be better than string concatenation.
  * keyboard support
  * class names / css styling / page styling
  */
