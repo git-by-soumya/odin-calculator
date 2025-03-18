@@ -19,12 +19,12 @@
  * results in 0 in the division by zero check +operandTwo === 0
  * Deleting a negative number using backspace until only minus is left causes 
  * operator press to be contained in operator while operandOne is '-'
+ * Issue where operandOne is filled, operator is equals to, and pressing 
+ * decimal button leads to operandTwo getting filled, instead of operandOne.
  */
 
 //todo
 /**
- * decimal button, only one decimal allowed in (display?) an operand
- * backspace to undo last input
  * Consider arrays for operands (push and pop), and join during evaluation. 
  * Might be better than string concatenation.
  * keyboard support
@@ -127,7 +127,7 @@ function operatorAndEqualsToPressHandler(signPressed, display) {
         !(operator === "/" && +operandTwo === 0)
     ) {
         let result = operate(operator, +operandOne, +operandTwo);
-        operandOne = result;
+        operandOne = result.toString();
         operator = signPressed;
         operandTwo = "";
         displayToScreen(display);
@@ -172,21 +172,24 @@ function backspacePressHandler(display) {
     }
 }
 
-function decimalPointPressHandler() {
-    /*
-    if num1, operator, num2 are filled and num2 doesn't have a decimal point
-        append a decimal point to num2
-
-    else if num1 and operator is filled, num2 is empty
-        overwrite num2 with "0."
-
-    else if num1 is filled, operator and num2 are empty, and num1 doesn't have 
-    a decimal point
-        append a decimal point to num2
-    
-    else if num1, operator, num2 are empty
-        overwrite num1 with "0."
-    */
+function decimalPointPressHandler(display) {
+    if(operandOne !== "" && operator !== "" && !(operandTwo.includes("."))) {
+        if(operator === "=") {
+            operandOne = "0.";
+            operator = "";
+            display.textContent = operandOne;
+        }
+        else {
+            operandTwo = operandTwo === "" ? "0." : (operandTwo + ".");
+            display.textContent = operandOne + operator + operandTwo;
+        } 
+    }
+    else if(
+        !(operandOne.includes(".")) && operator === "" && operandTwo === ""
+    ) {
+        operandOne = operandOne === "" ? "0." : (operandOne + ".");
+        display.textContent = operandOne;
+    }
 }
 
 function buttonPressHandler(event) {
@@ -221,6 +224,9 @@ function buttonPressHandler(event) {
                 break;
             case "⌫":
                 backspacePressHandler(display);
+                break;
+            case ".":
+                decimalPointPressHandler(display);
                 break;
         }
     }
