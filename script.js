@@ -12,6 +12,7 @@
 //todo
 /**
  * refactor
+ * display = before operand/result to show its presence and storage in operator
  * decimal button, only one decimal allowed in (display?) an operand
  * backspace to undo last input
  * Consider arrays for operands (push and pop), and join during evaluation.
@@ -45,7 +46,7 @@ let operandTwo = "";
 function operate(sign, num1, num2) {
     let result;
 
-    switch (sign) {
+    switch(sign) {
         case "+":
             result = add(num1, num2);
             break;
@@ -68,23 +69,23 @@ const doc = document;
 //let displayContent = "";
 
 function digitPressHandler(digitPressed, display) {
-    if (operandOne !== "" && operator !== "" && operandTwo !== "") {
+    if(operandOne !== "" && operator !== "" && operandTwo !== "") {
         operandTwo = operandTwo.toString() + digitPressed;
         display.textContent = operandOne + operator + operandTwo;
     }
-    else if (operandOne !== "" && operator === "=" && operandTwo === "") {
+    else if(operandOne !== "" && operator === "=" && operandTwo === "") {
         operandOne = digitPressed;
         operator = "";
         display.textContent = operandOne;
     }
-    else if (operandOne !== "" && 
+    else if(operandOne !== "" && 
         ["+", "-", "*", "/"].includes(operator) && 
         operandTwo === "") 
         {
         operandTwo = digitPressed;
         display.textContent = operandOne + operator + operandTwo;
     }
-    else if (operandOne !== "" && operator === "" && operandTwo === "") {
+    else if(operandOne !== "" && operator === "" && operandTwo === "") {
         operandOne = operandOne.toString() + digitPressed;
         display.textContent = operandOne;
     }
@@ -93,107 +94,94 @@ function digitPressHandler(digitPressed, display) {
         display.textContent = operandOne;
     } 
 }
-
-function operatorPressHandler() {
-    /*
-    if num1, operator, num2 are filled and division by zero is 
-    attempted(operator is division and num2 is zero at the same time)
-        display 'you nutter'
-        empty num1, operator, num2
-
-    else if num1, operator, num2 are filled and no division by 
-    zero(operator and num2 aren't division and zero, respectively, 
-    at the same time)
-        get result of operation on num1, operator, num2
-        overwrite num1 with result
-        overwrite operator with operatorPress(+ - * /)
-        empty num2
-        display num1 operator, i.e., display result operator
-
-    else if num1 and operator is filled, num2 is empty
-        overwrite operator with operatorPress(+ - * /)
-        display num1 operator
-
-    else if num1 is filled, operator and num2 are empty
-        overwrite operator with operatorPress(+ - * /)
-        display num1 operator
-
-    else if num1, operator, num2 are empty
-        overwrite num1 with zero or "0"
-        overwrite operator with operatorPress(+ - * /)
-        display num1 operator, i.e., display 0 operator
-    */
+/*
+function operatorPressHandler(signPressed, display) {
+    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
+        display.textContent = "you nutter";
+        operandOne = operator = operandTwo = "";        
+    }
+    else if(operandOne !== "" && operator !== "" && operandTwo !== "" && 
+        !(operator === "/" && +operandTwo === 0)
+    ) {
+        let result = operate(operator, +operandOne, +operandTwo);
+        operandOne = result;
+        operator = signPressed;
+        operandTwo = "";
+        display.textContent = operandOne + operator;
+    }
+    else if(operandOne !== "" && operandTwo === "") {
+        operator = signPressed;
+        display.textContent = operandOne + operator;
+    }
+    else if(operandOne === "" && operator === "" && operandTwo === "") {
+        operandOne = "0";
+        operator = signPressed;
+        display.textContent = operandOne + operator;        
+    }
 }
 
-function equalsToPressHandler() {
-    /*
-    if num1, operator, num2 are filled and division by zero is 
-    attempted(operator is division and num2 is zero at the same time)
-        display 'you nutter'
-        empty num1, operator, num2
-
-    else if num1, operator, num2 are filled and no division by 
-    zero(operator and num2 aren't division and zero, respectively, 
-    at the same time)
-        get result of operation on num1, operator, num2
-        overwrite num1 with result
-        overwrite operator with operatorPress(=)
-        empty num2
-        display num1, i.e., display result
-
-    else if num1 and operator is filled, num2 is empty
-        overwrite operator with operatorPress(=)
-        display num1
-
-    else if num1 is filled, operator and num2 are empty
-        overwrite operator with operatorPress(=)
-        display num1
-    */
+function equalsToPressHandler(display) {
+    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
+        display.textContent = "you nutter";
+        operandOne = operator = operandTwo = "";        
+    }
+    else if(
+        operandOne !== "" && operator !== "" && operandTwo !== "" && 
+        !(operator === "/" && +operandTwo === 0)
+    ) {
+        let result = operate(operator, +operandOne, +operandTwo);
+        operandOne = result;
+        operator = "=";
+        operandTwo = "";
+        display.textContent = operator + operandOne;
+    }
+    else if(operandOne !== "" && operandTwo === "") {
+        operator = "=";
+        display.textContent = operator + operandOne;
+    }
 }
-
-function operatorAndEqualsToPressHandler() { //too long???
-    /*
-    function display(display) {
-        if operator is + - * /
-            display num1 operator, i.e., display result operator
-        else if operator is =
-            display num1, i.e., display result
+*/
+function operatorAndEqualsToPressHandler(signPressed, display) { 
+    function displayToScreen(displayRef) {
+        if(["+", "-", "*", "/"].includes(operator)) {
+            displayRef.textContent = operandOne + operator;
+        }
+        else if(operator === "=") {
+            displayRef.textContent = operator + operandOne;
+        }
     }
 
-    if num1, operator, num2 are filled and division by zero is 
-    attempted(operator is division and num2 is zero at the same time)
-        display 'you nutter'
-        empty num1, operator, num2
-
-    else if num1, operator, num2 are filled and no division by 
-    zero(operator and num2 aren't division and zero, respectively, 
-    at the same time)
-        get result of operation on num1, operator, num2
-        overwrite num1 with result
-        overwrite operator with operatorPress(+ - * / =)
-        empty num2
-        display(num1, operator, display)
-
-    else if num1 and operator is filled, num2 is empty
-        overwrite operator with operatorPress(+ - * / =)
-        display(num1, operator, display)
-
-    else if num1 is filled, operator and num2 are empty
-        overwrite operator with operatorPress(+ - * / =)
-        display(num1, operator, display)
-
-    else if num1, operator, num2 are empty and operatorPress is + - * /, not =
-        overwrite num1 with zero or "0"
-        overwrite operator with operatorPress(+ - * /)
-        display num1 operator, i.e., display 0 operator
-    */
+    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
+        display.textContent = "you nutter";
+        operandOne = operator = operandTwo = "";        
+    }
+    else if(
+        operandOne !== "" && operator !== "" && operandTwo !== "" && 
+        !(operator === "/" && +operandTwo === 0)
+    ) {
+        let result = operate(operator, +operandOne, +operandTwo);
+        operandOne = result;
+        operator = signPressed;
+        operandTwo = "";
+        displayToScreen(display);
+    }
+    else if(operandOne !== "" && operandTwo === "") {
+        operator = signPressed;
+        displayToScreen(display);
+    }
+    else if(
+        operandOne === "" && operator === "" && operandTwo === "" && 
+        ["+", "-", "*", "/"].includes(signPressed)
+    ) {
+        operandOne = "0";
+        operator = signPressed;
+        displayToScreen(display);
+    }
 }
 
-function clearPressHandler() {
-    /*
-    display 0 or "0"
-    empty num1, operator, num2
-    */
+function clearPressHandler(display) {
+    display.textContent = "0";
+    operandOne = operator = operandTwo = "";    
 }
 
 function backspacePressHandler() {
@@ -236,11 +224,11 @@ function decimalPointPressHandler() {
 function buttonPressHandler(event) {
     const target = event.target;
 
-    if (target.tagName === "BUTTON") {
+    if(target.tagName === "BUTTON") {
         const buttonContent = target.textContent;
         const display = document.querySelector("p");
 
-        switch (buttonContent) {
+        switch(buttonContent) {
             case "0":
             case "1":
             case "2":
@@ -257,80 +245,11 @@ function buttonPressHandler(event) {
             case "-":
             case "*":
             case "/":
-                if (buttonContent !== "=") {
-                    if (operandOne !== "") {
-                        if (operator !== "") {
-                            if (operandTwo !== "") {
-                                if (operator === "/" && +operandTwo === 0) {
-                                    display.textContent = "you nutter";
-                                    operandOne = operator = operandTwo = "";
-                                }
-                                else {
-                                    let result =
-                                        operate(operator, +operandOne, +operandTwo);
-                                    operandOne = result;
-                                    operator = buttonContent;
-                                    operandTwo = "";
-                                    display.textContent =
-                                        operandOne.toString().concat(operator);
-                                }
-                            }
-                            else if (operandTwo === "") {
-                                operator = buttonContent;
-                                display.textContent =
-                                    operandOne.toString().concat(operator);
-                            }
-                        }
-                        else if (operator === "") {
-                            operator = buttonContent;
-                            display.textContent =
-                                operandOne.toString().concat(operator);
-                        }
-                    }
-                    else if (operandOne === "") {
-                        operandOne = "0";
-                        operator = buttonContent;
-                        display.textContent =
-                            operandOne.toString().concat(operator);
-                    }
-                }
-                break;
             case "=":
-                if (buttonContent === "=") {
-                    if (operandOne !== "") {
-                        if (operator !== "") {
-                            if (operandTwo !== "") {
-                                if (operator === "/" && +operandTwo === 0) {
-                                    display.textContent = "you nutter";
-                                    operandOne = operator = operandTwo = "";
-                                }
-                                else {
-                                    let result =
-                                        operate(operator, +operandOne, +operandTwo);
-                                    operandOne = result;
-                                    operator = buttonContent;
-                                    operandTwo = "";
-                                    display.textContent = operandOne;
-                                }
-                            }
-                            else if (operandTwo === "") {
-                                operator = buttonContent;
-                                display.textContent = operandOne;
-                            }
-                        }
-                        else if (operator === "") {
-                            operator = buttonContent;
-                            display.textContent = operandOne;
-                        }
-                    }
-                    else if (operandOne === "") {
-                        //do nothing
-                    }
-                }
+                operatorAndEqualsToPressHandler(buttonContent, display);
                 break;
             case "Clear":
-                display.textContent = "0";
-                operandOne = operator = operandTwo = "";
+                clearPressHandler(display);
                 break;
         }
     }
