@@ -7,6 +7,7 @@
  * just like, 
  * +"0" is numeric zero
  * Redundant code
+ * Operations on negative numbers such as -5 * -5 might be problematic
  */
 
 //seemingly corrected
@@ -16,6 +17,8 @@
  * Issue where pressing the following buttons in order: 7 / =
  * gets 'you nutter'. This is due to empty string value of operandTwo, which 
  * results in 0 in the division by zero check +operandTwo === 0
+ * Deleting a negative number using backspace until only minus is left causes 
+ * operator press to be contained in operator while operandOne is '-'
  */
 
 //todo
@@ -108,7 +111,12 @@ function operatorAndEqualsToPressHandler(signPressed, display) {
         }
     }
 
-    if(operandOne !== "" && operator === "/" && operandTwo !== "" && 
+    if(operandOne === "-" && operator === "" && operandTwo === "") {
+        operandOne = "0";
+        operator = signPressed;
+        displayToScreen(display);
+    }
+    else if(operandOne !== "" && operator === "/" && operandTwo !== "" && 
         +operandTwo === 0) 
         {
         display.textContent = "you nutter";
@@ -143,24 +151,25 @@ function clearPressHandler(display) {
     operandOne = operator = operandTwo = "";    
 }
 
-function backspacePressHandler() {
-    /*
-    if num1, operator, num2 are filled
-        remove last digit of num2, i.e., overwrite num2 with num2.slice(0, -1)
-        display num1 operator num2
+function backspacePressHandler(display) {
+    if(operandOne !== "" && operator !== "" && operandTwo !== "") {
+        operandTwo = operandTwo.toString().slice(0, -1);
+        display.textContent = operandOne + operator + operandTwo;
+    }
+    else if(operandOne !== "" && operator !== "" && operandTwo === "") {
+        operator = "";
+        display.textContent = operandOne;
+    }
+    else if(operandOne !== "" && operator === "" && operandTwo === "") {
+        operandOne = operandOne.toString().slice(0, -1);
 
-    else if num1 and operator is filled, num2 is empty
-        empty operator
-        display num1
-
-    else if num1 is filled, operator and num2 are empty
-        remove last digit of num1, i.e., overwrite num1 with num1.slice(0, -1)
-
-        if num1 is filled
-            display num1
-        else
-            display 0 or "0"
-    */
+        if(operandOne !== "") {
+            display.textContent = operandOne;
+        }
+        else {
+            display.textContent = "0";
+        }
+    }
 }
 
 function decimalPointPressHandler() {
@@ -209,6 +218,9 @@ function buttonPressHandler(event) {
                 break;
             case "Clear":
                 clearPressHandler(display);
+                break;
+            case "⌫":
+                backspacePressHandler(display);
                 break;
         }
     }
