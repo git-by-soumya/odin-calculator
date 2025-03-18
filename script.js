@@ -233,3 +233,41 @@ function buttonPressHandler(event) {
 }
 
 doc.addEventListener("click", buttonPressHandler);
+
+function keyboardHandler(event) {
+    const key = event.key;
+    const display = document.querySelector("p");
+
+    switch(key) {
+        case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+                digitPressHandler(key, display);
+                break;
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "=":
+                operatorAndEqualsToPressHandler(key, display);
+                break;
+            case "Enter":
+                operatorAndEqualsToPressHandler("=", display);
+                break;                
+            case "Backspace":
+                backspacePressHandler(display);
+                break;
+            case ".":
+                decimalPointPressHandler(display);
+                break;        
+    }
+}
+
+doc.addEventListener("keydown", keyboardHandler);
