@@ -1,24 +1,32 @@
 //known issues
 /**
  * Answers with long decimal parts aren't rounded, might overflow
+ * Leading zeroes are present if operands are initialized with zeroes, be 
+ * careful of: 
+ * +"" which means numeric zero, 
+ * just like, 
+ * +"0" is numeric zero
+ * Redundant code
  */
 
 //seemingly corrected
 /**
  * Divide by zero gets Infinity instead of snarky error message
  * Operation on the above result (or 0/0) will result in NaN
+ * Issue where pressing the following buttons in order: 7 / =
+ * gets 'you nutter'. This is due to empty string value of operandTwo, which 
+ * results in 0 in the division by zero check +operandTwo === 0
  */
 
 //todo
 /**
- * refactor
- * display = before operand/result to show its presence and storage in operator
  * decimal button, only one decimal allowed in (display?) an operand
  * backspace to undo last input
- * Consider arrays for operands (push and pop), and join during evaluation.
+ * Consider arrays for operands (push and pop), and join during evaluation. 
  * Might be better than string concatenation.
  * keyboard support
  * class names / css styling / page styling
+ * refactor round 2
  */
 
 "use strict";
@@ -66,7 +74,6 @@ function operate(sign, num1, num2) {
 }
 
 const doc = document;
-//let displayContent = "";
 
 function digitPressHandler(digitPressed, display) {
     if(operandOne !== "" && operator !== "" && operandTwo !== "") {
@@ -85,62 +92,12 @@ function digitPressHandler(digitPressed, display) {
         operandTwo = digitPressed;
         display.textContent = operandOne + operator + operandTwo;
     }
-    else if(operandOne !== "" && operator === "" && operandTwo === "") {
+    else if(operator === "" && operandTwo === "") {
         operandOne = operandOne.toString() + digitPressed;
-        display.textContent = operandOne;
-    }
-    else if(operandOne === "" && operator === "" && operandTwo === "") {
-        operandOne = digitPressed;
         display.textContent = operandOne;
     } 
 }
-/*
-function operatorPressHandler(signPressed, display) {
-    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
-        display.textContent = "you nutter";
-        operandOne = operator = operandTwo = "";        
-    }
-    else if(operandOne !== "" && operator !== "" && operandTwo !== "" && 
-        !(operator === "/" && +operandTwo === 0)
-    ) {
-        let result = operate(operator, +operandOne, +operandTwo);
-        operandOne = result;
-        operator = signPressed;
-        operandTwo = "";
-        display.textContent = operandOne + operator;
-    }
-    else if(operandOne !== "" && operandTwo === "") {
-        operator = signPressed;
-        display.textContent = operandOne + operator;
-    }
-    else if(operandOne === "" && operator === "" && operandTwo === "") {
-        operandOne = "0";
-        operator = signPressed;
-        display.textContent = operandOne + operator;        
-    }
-}
 
-function equalsToPressHandler(display) {
-    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
-        display.textContent = "you nutter";
-        operandOne = operator = operandTwo = "";        
-    }
-    else if(
-        operandOne !== "" && operator !== "" && operandTwo !== "" && 
-        !(operator === "/" && +operandTwo === 0)
-    ) {
-        let result = operate(operator, +operandOne, +operandTwo);
-        operandOne = result;
-        operator = "=";
-        operandTwo = "";
-        display.textContent = operator + operandOne;
-    }
-    else if(operandOne !== "" && operandTwo === "") {
-        operator = "=";
-        display.textContent = operator + operandOne;
-    }
-}
-*/
 function operatorAndEqualsToPressHandler(signPressed, display) { 
     function displayToScreen(displayRef) {
         if(["+", "-", "*", "/"].includes(operator)) {
@@ -151,9 +108,11 @@ function operatorAndEqualsToPressHandler(signPressed, display) {
         }
     }
 
-    if(operandOne !== "" && operator === "/" && +operandTwo === 0) {
+    if(operandOne !== "" && operator === "/" && operandTwo !== "" && 
+        +operandTwo === 0) 
+        {
         display.textContent = "you nutter";
-        operandOne = operator = operandTwo = "";        
+        operandOne = operator = operandTwo = "";
     }
     else if(
         operandOne !== "" && operator !== "" && operandTwo !== "" && 
