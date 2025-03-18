@@ -27,7 +27,6 @@
 /**
  * Consider arrays for operands (push and pop), and join during evaluation. 
  * Might be better than string concatenation.
- * keyboard support
  * class names / css styling / page styling
  * refactor round 2
  */
@@ -192,82 +191,54 @@ function decimalPointPressHandler(display) {
     }
 }
 
-function buttonPressHandler(event) {
-    const target = event.target;
-
-    if(target.tagName === "BUTTON") {
-        const buttonContent = target.textContent;
-        const display = document.querySelector("p");
-
-        switch(buttonContent) {
-            case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-                digitPressHandler(buttonContent, display);
-                break;
-            case "+":
-            case "-":
-            case "*":
-            case "/":
-            case "=":
-                operatorAndEqualsToPressHandler(buttonContent, display);
-                break;
-            case "Clear":
-                clearPressHandler(display);
-                break;
-            case "⌫":
-                backspacePressHandler(display);
-                break;
-            case ".":
-                decimalPointPressHandler(display);
-                break;
-        }
+function handler(event) {
+    const type = event.type;
+    let buttonContent;
+    if(type === "keydown") {
+        buttonContent = event.key;
     }
-}
-
-doc.addEventListener("click", buttonPressHandler);
-
-function keyboardHandler(event) {
-    const key = event.key;
+    else if(type === "click" && event.target.tagName === "BUTTON") {
+        buttonContent = event.target.textContent;
+    }
+    else {
+        return;
+    }
     const display = document.querySelector("p");
 
-    switch(key) {
+    switch(buttonContent) {
         case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-                digitPressHandler(key, display);
-                break;
-            case "+":
-            case "-":
-            case "*":
-            case "/":
-            case "=":
-                operatorAndEqualsToPressHandler(key, display);
-                break;
-            case "Enter":
-                operatorAndEqualsToPressHandler("=", display);
-                break;                
-            case "Backspace":
-                backspacePressHandler(display);
-                break;
-            case ".":
-                decimalPointPressHandler(display);
-                break;        
-    }
+        case "1":
+        case "2":
+        case "3":
+        case "4":
+        case "5":
+        case "6":
+        case "7":
+        case "8":
+        case "9":
+            digitPressHandler(buttonContent, display);
+            break;
+        case "+":
+        case "-":
+        case "*":
+        case "/":
+        case "=":
+        case "Enter":
+            buttonContent = buttonContent === "Enter" ? "=" : buttonContent;
+            operatorAndEqualsToPressHandler(buttonContent, display);
+            break;                        
+        case "Clear":
+            clearPressHandler(display);
+            break;
+        case "⌫":
+        case "Backspace":
+            backspacePressHandler(display);
+            break;
+        case ".":
+            decimalPointPressHandler(display);
+            break;       
+    }    
 }
 
-doc.addEventListener("keydown", keyboardHandler);
+doc.addEventListener("click", handler);
+doc.addEventListener("keydown", handler);
