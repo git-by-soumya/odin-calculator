@@ -1,0 +1,93 @@
+body {
+    background-color: darkslategrey;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    height: 100vh;
+    margin: 0;
+}
+
+p {
+    color: white;
+    background-color: black;
+    margin: 0;
+    text-align: end;
+    padding: 1vmin;
+    border-radius: 1vmin;
+}
+
+.main-container {
+    border: 0.5vmin outset black;
+    border-radius: 1vmin;
+    display: flex;
+    flex-direction: column;
+    padding: 1vmin;
+    background-color: lightsteelblue;
+}
+
+.button-container {
+    display: flex;
+}
+
+.columns {
+    display: flex;
+}
+
+.columns div {
+    display: flex;
+    flex-direction: column;
+}
+
+.rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.rows div {
+    display: flex;
+}
+
+button {
+    flex-grow: 1;
+    width: 10vmin;
+    height: 10vmin;
+    box-sizing: content-box;
+    background-color: steelblue;
+    border-radius: 1vmin;
+}
+
+p, 
+button {
+    font-size: 7vmin;
+}
+
+.main-container, 
+.button-container, 
+.columns, 
+.columns div, 
+.rows, 
+.rows div {
+    gap: 1vmin;
+}
+
+.clear-button {
+    color: white;
+    background-color: rgb(150, 0, 0);
+}
+
+.equals-to-button {
+    background-color: rgb(0, 150, 0);
+}
+
+.backspace-button {
+    background-color: rgb(200, 200, 0);
+}
+
+.operator-button {
+    background-color: rgb(150, 150, 150);
+}
+
+.decimal-point-button {
+    background-color: rgb(110, 140, 165);
+}

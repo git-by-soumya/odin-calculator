@@ -8,24 +8,75 @@
     <script defer src="./script.js"></script>
 </head>
 <body>
-    <p>0</p>
-    <button>⌫</button>
-    <button>0</button>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
-    <button>8</button>
-    <button>9</button>
-    <button>.</button>
-    <button>+</button>
-    <button>-</button>
-    <button>*</button>
-    <button>/</button>
-    <button>=</button>
-    <button>Clear</button>
+    <div class="main-container">
+        <p>0</p>
+        <div class="button-container">
+            <div class="rows">
+                <div class="first-row">
+                    <button class="clear-button">Clear</button>
+                </div>
+                <div class="second-row">
+                    <button>7</button>
+                    <button>8</button>
+                </div>
+                <div class="third-row">
+                    <button>4</button>
+                    <button>5</button>
+                </div>
+                <div class="fourth-row">
+                    <button>1</button>
+                    <button>2</button>
+                </div>
+                <div class="fifth-row">
+                    <button>0</button>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column-one">
+                    <button class="backspace-button">⌫</button>
+                    <button>9</button>
+                    <button>6</button>
+                    <button>3</button>
+                    <button class="decimal-point-button">.</button>
+                </div>
+                <div class="column-two">
+                    <button class="operator-button">/</button>
+                    <button class="operator-button">*</button>
+                    <button class="operator-button">-</button>
+                    <button class="operator-button">+</button>
+                    <button class="equals-to-button">=</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+
+<!--
+Class names may be given for better clarification.
+Main container will contain display panel and (button container?).
+Button container may/will contain buttons.
+Main container should be centered vertically and horizontally.
+Display panel should be at the top of the main container.
+Color of different components should be different.
+Main container and display panel should have different colors.
+Button container may or may not have a different color.
+Buttons should have a different color or border(style, width etc.).
+Digit, decimal point, operator, equals to, Clear and Backspace buttons may have 
+different colors.
+
+1st row
+Clear Backspace-sign Divide-sign
+2nd row
+7 8 9 Multiply-sign
+3rd row
+4 5 6 Minus-sign
+4th row
+1 2 3 Plus-sign
+5th row
+0 Decimal-sign Equals-to-sign
+
+operators / * - + = top to bottom 1 column right most side
+bottom row numbers 0 might be 2x size of decimal sign
+top row backspace and clear can choose their sign
+-->

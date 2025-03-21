@@ -8,6 +8,12 @@
  * +"0" is numeric zero
  * Redundant code
  * Operations on negative numbers such as -5 * -5 might be problematic
+ * Website button selection and input using TAB and Enter keys is not supported.
+ * Operations such as 123456789 * 123456789 lengthens the display until it is 
+ * larger than the button container! Consider limiting the number of characters 
+ * in an operand(not digits, as it may contain the negation symbol or - and/or 
+ * the decimal point).
+ * 12 characters seems to be the limit; try for 11 or 10 to be safe.
  */
 
 //seemingly corrected
@@ -25,9 +31,9 @@
 
 //todo
 /**
- * Consider arrays for operands (push and pop), and join during evaluation. 
- * Might be better than string concatenation.
  * class names / css styling / page styling
+ * Consider putting operandOne, operandTwo, operator and the result in 
+ * different rows.
  * refactor round 2
  */
 
@@ -236,8 +242,8 @@ function handler(event) {
             break;
         case ".":
             decimalPointPressHandler(display);
-            break;       
-    }    
+            break;
+    }
 }
 
 doc.addEventListener("click", handler);
