@@ -1,6 +1,5 @@
 //known issues
 /**
- * Answers with long decimal parts aren't rounded, might overflow
  * Leading zeroes are present if operands are initialized with zeroes, be 
  * careful of: 
  * +"" which means numeric zero, 
@@ -9,11 +8,12 @@
  * Redundant code
  * Operations on negative numbers such as -5 * -5 might be problematic
  * Website button selection and input using TAB and Enter keys is not supported.
- * Operations such as 123456789 * 123456789 lengthens the display until it is 
- * larger than the button container! Consider limiting the number of characters 
- * in an operand(not digits, as it may contain the negation symbol or - and/or 
- * the decimal point).
- * 12 characters seems to be the limit; try for 11 or 10 to be safe.
+ * Noted issues where too small screen size(width or height) can squeeze the 
+ * main-container to be smaller than display and buttons. Bigger screen / 
+ * fullscreen display also stretches the UI.
+ * Noted issue? where the scrollbar, which is normally at the end if displayed, 
+ * can be positioned slightly left if display is sized to fullscreen from 
+ * normal screen.
  */
 
 //seemingly corrected
@@ -27,6 +27,12 @@
  * operator press to be contained in operator while operandOne is '-'
  * Issue where operandOne is filled, operator is equals to, and pressing 
  * decimal button leads to operandTwo getting filled, instead of operandOne.
+ * Answers with long decimal parts aren't rounded, might overflow
+ * Operations such as 123456789 * 123456789 lengthens the display until it is 
+ * larger than the button container! Consider limiting the number of characters 
+ * in an operand(not digits, as it may contain the negation symbol or - and/or 
+ * the decimal point).
+ * 12 characters seems to be the limit; try for 11 or 10 to be safe.
  */
 
 //todo
@@ -103,7 +109,8 @@ function digitPressHandler(digitPressed, display) {
     else if(operator === "" && operandTwo === "") {
         operandOne = operandOne.toString() + digitPressed;
         display.textContent = operandOne;
-    } 
+    }
+    display.scrollBy(display.scrollWidth, 0);
 }
 
 function operatorAndEqualsToPressHandler(signPressed, display) { 
@@ -114,6 +121,7 @@ function operatorAndEqualsToPressHandler(signPressed, display) {
         else if(operator === "=") {
             displayRef.textContent = operator + operandOne;
         }
+        displayRef.scrollBy(displayRef.scrollWidth, 0);
     }
 
     if(operandOne === "-" && operator === "" && operandTwo === "") {
@@ -149,11 +157,13 @@ function operatorAndEqualsToPressHandler(signPressed, display) {
         operator = signPressed;
         displayToScreen(display);
     }
+    display.scrollBy(display.scrollWidth, 0);
 }
 
 function clearPressHandler(display) {
     display.textContent = "0";
-    operandOne = operator = operandTwo = "";    
+    operandOne = operator = operandTwo = "";
+    display.scrollBy(display.scrollWidth, 0); 
 }
 
 function backspacePressHandler(display) {
@@ -175,6 +185,7 @@ function backspacePressHandler(display) {
             display.textContent = "0";
         }
     }
+    display.scrollBy(display.scrollWidth, 0);
 }
 
 function decimalPointPressHandler(display) {
@@ -187,7 +198,7 @@ function decimalPointPressHandler(display) {
         else {
             operandTwo = operandTwo === "" ? "0." : (operandTwo + ".");
             display.textContent = operandOne + operator + operandTwo;
-        } 
+        }
     }
     else if(
         !(operandOne.includes(".")) && operator === "" && operandTwo === ""
@@ -195,6 +206,7 @@ function decimalPointPressHandler(display) {
         operandOne = operandOne === "" ? "0." : (operandOne + ".");
         display.textContent = operandOne;
     }
+    display.scrollBy(display.scrollWidth, 0);
 }
 
 function handler(event) {
