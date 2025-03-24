@@ -1,12 +1,8 @@
 //known issues
 /**
- * Leading zeroes are present if operands are initialized with zeroes, be 
- * careful of: 
- * +"" which means numeric zero, 
- * just like, 
- * +"0" is numeric zero
  * Redundant code
- * Operations on negative numbers such as -5 * -5 might be problematic
+ * Operations on negative numbers such as -5 * -5 might be problematic (might 
+ * need multiple rows to display expression/expression parsing algorithm-stack?)
  * Website button selection and input using TAB and Enter keys is not supported.
  * Noted issues where too small screen size(width or height) can squeeze the 
  * main-container to be smaller than display and buttons. Bigger screen / 
@@ -41,6 +37,12 @@
  * overflows (any operand), the above behaviour shows up. Edit 2: THe issue has 
  * been solved using a relatively new feature, text-wrap-mode. But the actual 
  * cause was not found.
+ * Leading zeroes are present if operands are initialized with zeroes (be 
+ * careful of: +"" which means numeric zero, just like,  * +"0" is numeric zero)
+ * Edit: Partially solved, typing zeroes consecutively doesn't concatenate them 
+ * to operands from the second zero press onwards, but one leading zero is 
+ * present and displayed when other numbers are pressed. The leading zero 
+ * should be overwritten.
  */
 
 //todo
@@ -102,7 +104,11 @@ function operate(sign, num1, num2) {
 const doc = document;
 
 function digitPressHandler(digitPressed, display) {
-    if(operandOne !== "" && operator !== "" && operandTwo !== "") {
+    if(operandOne !== "" && operator !== "" && operandTwo === "0") {
+        operandTwo = digitPressed;
+        display.textContent = operandOne + operator + operandTwo;        
+    }
+    else if(operandOne !== "" && operator !== "" && operandTwo !== "") {
         operandTwo = operandTwo.toString() + digitPressed;
         display.textContent = operandOne + operator + operandTwo;
     }
@@ -117,6 +123,10 @@ function digitPressHandler(digitPressed, display) {
         {
         operandTwo = digitPressed;
         display.textContent = operandOne + operator + operandTwo;
+    }
+    else if(operandOne === "0" && operator === "" && operandTwo === "") {
+        operandOne = digitPressed;
+        display.textContent = operandOne;        
     }
     else if(operator === "" && operandTwo === "") {
         operandOne = operandOne.toString() + digitPressed;
