@@ -14,6 +14,8 @@
  * Noted issue? where the scrollbar, which is normally at the end if displayed, 
  * can be positioned slightly left if display is sized to fullscreen from 
  * normal screen.
+ * Answers with long decimal parts aren't rounded, might show recurring numbers
+ * 12.12 * 10 shows 121.1999999999999 recurring decimal
  */
 
 //seemingly corrected
@@ -27,20 +29,30 @@
  * operator press to be contained in operator while operandOne is '-'
  * Issue where operandOne is filled, operator is equals to, and pressing 
  * decimal button leads to operandTwo getting filled, instead of operandOne.
- * Answers with long decimal parts aren't rounded, might overflow
  * Operations such as 123456789 * 123456789 lengthens the display until it is 
  * larger than the button container! Consider limiting the number of characters 
  * in an operand(not digits, as it may contain the negation symbol or - and/or 
  * the decimal point).
  * 12 characters seems to be the limit; try for 11 or 10 to be safe.
+ * Noted issue? where typing 0 - 0.11111111111111111111 (20 1's after decimal 
+ * point), puts text "0-" at the top and the 2nd operand at the bottom, i.e. the 
+ * 1st operand & the operator is on first row, while the 2nd operand is on 
+ * second row. Edit: the problem is with minus. If an expression with minus 
+ * overflows (any operand), the above behaviour shows up. Edit 2: THe issue has 
+ * been solved using a relatively new feature, text-wrap-mode. But the actual 
+ * cause was not found.
  */
 
 //todo
 /**
- * class names / css styling / page styling
+ * Validate html, css
+ * Check css overview in DevTools
+ * Check performance scores in DevTools
+ * Check sustainability scores
+ * Class names / css styling / page styling
  * Consider putting operandOne, operandTwo, operator and the result in 
  * different rows.
- * refactor round 2
+ * Refactor round 2
  */
 
 "use strict";

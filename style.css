@@ -17,6 +17,7 @@ p {
     border-radius: 1vmin;
     width: 52vmin;
     overflow: auto;
+    text-wrap-mode: nowrap;
 }
 
 .main-container {
