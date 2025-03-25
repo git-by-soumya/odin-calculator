@@ -13,22 +13,22 @@ p {
     background-color: black;
     margin: 0;
     text-align: end;
-    padding: 1vmin;
-    border-radius: 1vmin;
-    width: 52vmin;
+    padding: 5px;
+    border-radius: 25px;
+    width: 280px;
     overflow: auto;
     text-wrap-mode: nowrap;
 }
 
 .main-container {
-    border: 0.5vmin outset black;
-    border-radius: 1vmin;
+    border: 5px outset black;
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
-    padding: 1vmin;
+    padding: 5px;
     background-color: lightsteelblue;
     align-items: center;
-    width: 54vmin;
+    width: 300px;
 }
 
 .button-container {
@@ -55,16 +55,16 @@ p {
 
 button {
     flex-grow: 1;
-    width: 10vmin;
-    height: 10vmin;
+    width: 50px;
+    height: 50px;
     box-sizing: content-box;
     background-color: steelblue;
-    border-radius: 1vmin;
+    border-radius: 25px;
 }
 
 p, 
 button {
-    font-size: 7vmin;
+    font-size: 2em;
 }
 
 .main-container, 
@@ -73,7 +73,7 @@ button {
 .columns div, 
 .rows, 
 .rows div {
-    gap: 1vmin;
+    gap: 5px;
 }
 
 .clear-button {
